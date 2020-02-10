@@ -1,0 +1,90 @@
+<!--
+    Copyright (c) 2020, salesforce.com, inc.
+    All rights reserved.
+    SPDX-License-Identifier: BSD-3-Clause
+    For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<template>
+    <template if:true={lazy}>
+        <div>
+            <span>{lazyString}</span>
+            <button onclick={refetch} class="btn btn-primary">Fetch</button>
+        </div>
+    </template>
+    <template if:true={isLoading}>
+        <div>Loading...</div>
+    </template>
+    <template if:true={isError}>
+        <div>{books.error}</div>
+    </template>
+    <template if:true={hasData}>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <li class="page-item">
+                <a onclick={handleFirst} class="page-link" href="#" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                  <span class="sr-only">First</span>
+                </a>
+              </li>
+              <li class="page-item">
+                <a onclick={handlePrev} class="page-link" href="#" aria-label="Previous">
+                  <span aria-hidden="true">&lsaquo;</span>
+                  <span class="sr-only">Previous</span>
+                </a>
+              </li>
+              <li class="page-item"><a class="page-link" href="#">{pageNavigation}</a></li>
+              <li class="page-item">
+                <a onclick={handleNext} class="page-link" href="#" aria-label="Next">
+                  <span aria-hidden="true">&rsaquo;</span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </li>
+              <li class="page-item">
+                <a onclick={handleLast} class="page-link" href="#" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                  <span class="sr-only">Last</span>
+                </a>
+              </li>
+              <li class="page-item">
+                <a onclick={handleRefetch} class="page-link" href="#" aria-label="Next">
+                    <span class="fa fa-refresh" aria-hidden="true"></span>
+                </a>
+              </li>
+            </ul>
+        </nav>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col" style="width: 30%">Title</th>
+                    <th scope="col" style="width: 25%">Author</th>
+                    <th scope="col" style="width: 20%">Genre</th>
+                    <th scope="col" style="width: 20%">Publisher</th>
+                    <th scope="col" style="width: 5%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <template for:each={bookList} for:item="book" for:index="index">
+                    <tr key={book.id} bookidx={index}>
+                        <td><a href="#" onclick={handleUpdate}>{book.title}</a></td>
+                        <td>{book.author}</td>
+                        <td>{book.genre}</td>
+                        <td>{book.publisher}</td>
+                        <td>
+                            <a href="#" class="badge badge-light" onclick={handleDelete}><span class="fa fa-trash fa-lg" aria-hidden="true"></span></a>
+                        </td>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+
+        <div>
+            <button type="button" class="btn btn-primary" onclick={handleCreate}>New Book</button>
+        </div>
+
+    </template>
+
+    <!-- Dialog for editing a book -->
+    <query-bookdialog></query-bookdialog>
+
+</template>

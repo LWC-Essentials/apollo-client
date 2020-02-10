@@ -1,0 +1,35 @@
+{
+  "name": "@lwce/apollo-client",
+  "version": "0.0.1",
+  "description": "Apollo client integration for Lightning Web Components",
+  "license": "BSD-3-Clause",
+  "author": "Philippe Riand",
+  "bugs": "https://github.com/LWC-Essentials/apollo-client/issues",
+  "main": "dist/es6/index.js",
+  "typings": "dist/types/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "pack": "yarn build && yarn pack",
+    "build-publish": "yarn build && yarn pack && yarn publish --access public",
+    "clean": "rm ./*.tgz"
+  },
+  "files": [
+    "dist/",
+    "types/"
+  ],
+  "devDependencies": {
+    "@lwc/engine": "1.1.13",
+    "@lwc/wire-service": "^1.1.13"
+  },
+  "dependencies": {
+    "apollo-client": "^2.6.4"
+  },
+  "homepage": "https://github.com/LWC-Essentials/apollo-client",
+  "keywords": [
+    "lwc", "wire adapter", "graphql", "apollo"
+  ],
+  "engines": {
+    "yarn": ">=1.10.1",
+    "node": ">=10.6.0"
+  }
+}

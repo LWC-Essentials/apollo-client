@@ -1,0 +1,50 @@
+<!--
+    Copyright (c) 2020, salesforce.com, inc.
+    All rights reserved.
+    SPDX-License-Identifier: BSD-3-Clause
+    For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+-->
+<template>
+
+    <div class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <h5 if:true={title} class="modal-title">{title}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="dlgTitle">Title</label>
+                        <rad-input type="text"  field="title" id="dlgTitle"></rad-input>
+                    </div>
+                    <div class="form-group">
+                        <label for="dlgAuthor">Author</label>
+                        <rad-input type="text" field="author" id="dlgAuthor"></rad-input>
+                    </div>
+                    <div class="form-group">
+                        <label for="dlgGenre">Genre</label>
+                        <rad-input type="text" field="genre" id="dlgGenre"></rad-input>
+                    </div>
+                    <div class="form-group">
+                        <label for="dlgPublisher">Publisher</label>
+                        <rad-input type="text" field="publisher" id="dlgPublisher"></rad-input>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" onclick={handleSave}>Save changes</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+</template>
