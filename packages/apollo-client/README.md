@@ -39,7 +39,7 @@ A query can be executed using the `useQuery` wire adapter like bellow:
             }
         }        
    `
-   ...   
+   ...
    @wire(useQuery, {
         query: MYQUERY
     }) books;
@@ -47,10 +47,10 @@ A query can be executed using the `useQuery` wire adapter like bellow:
 
 Because of the current LWC compiler behavior, it is advised to isolate the GraphQL in a constant and then reference this constant. This generates more optimized code, as the LWC will repeat the query several times if not in a constant.  
 
-Note: to make the wire adapter react on a variable value change, the whole `variables` object has to be replaced, as a change in a property is not detected. For example, changing the offset should be done with code like:  
+Note: to make the wire adapter react on a variable value change, the whole `variables` object has to be replaced, as a change in a property is not detected (even when `@track`). For example, changing the offset should be done with code like:  
 
 ```javascript
-    @track variables = {
+    variables = {
         offset: 0,
         limit: 10
     }
