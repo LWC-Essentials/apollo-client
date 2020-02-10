@@ -55,7 +55,7 @@ export default class Booklist extends LightningElement {
 
     @api lazy=false; // Default boolean value
 
-    @track variables = {
+    variables = {
         offset: 0,
         limit: 10
     }
