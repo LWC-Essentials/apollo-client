@@ -1,4 +1,7 @@
-# apollo-client
+# @lwce/apollo-client
+
+[![npm version](https://img.shields.io/npm/v/@lwce/apollo-client?style=flat)](https://www.npmjs.com/package/@lwce/apollo-client)
+
 
 `@lwce/apollo-client` is an Apollo GraphQL client for Lightning Web Components
 

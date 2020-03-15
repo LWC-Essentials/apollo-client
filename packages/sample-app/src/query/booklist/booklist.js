@@ -114,7 +114,7 @@ export default class Booklist extends LightningElement {
 
     _findBookIdx(event) {
         for(let e=event.target; e; e=e.parentNode) {
-            if(e.hasAttribute("bookidx")) {
+            if(e.hasAttribute && e.hasAttribute("bookidx")) {
                 return parseInt(e.getAttribute("bookidx"),10);
             }
         }
