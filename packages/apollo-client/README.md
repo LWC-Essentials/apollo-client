@@ -119,6 +119,23 @@ Once initialized, the result provides a `fetch(variables)` function that can be 
 Note that the React Hooks library named this function `refetch`, but it is named `fetch` here for consistency with other LWC projects.
 
 
+### Lazy mode
+
+The GraphQL request is automatically emitted when the wire adapter configuration is available, which means when the component is connected to the DOM. This works well for data needed by the component to display right away, typically a query. But, sometimes, the request should be executed manually. It applies to data requested on demand (list for a pop-up, ...).  The `fetch` method returns a `Promise` that will be resolved when the request is completed. At that time, the `@wire` member is updated with the latest data. Note that the Promise is also resolved when the update failed: just access the error member of the `@wire` member to check the status.
+
+Here an example of a request executed on demand:
+```javascript
+    readUsers() {
+        this.users.fetch().then( () => {
+            // Notification that the data has been updated
+            // Do something with the @wire data member...
+        })
+    }
+```  
+
+To support that, the wire adapter offers a `lazy` mode. When set to `true`, the request is only executed with an explicit call to a `fetch()` method, provided as part of the @wire variable.  
+
+
 ## Executing a mutation
 
 Mutations use the `useMutation` wire adapter:  
@@ -137,8 +154,8 @@ Mutations use the `useMutation` wire adapter:
         query: MY_MUTATION
     }) updateBook;
 ```  
- 
-The wire will initialize the result and make available a `mutate` function to call:  
+
+Similarly to lazy queries, the requests is not executed when the component is initialized but must be executed imperativelyexplicitly. For this, the wire adapter will initialize the result and make available a `mutate` method to call:  
 
 ```javascript
     const variables = {
