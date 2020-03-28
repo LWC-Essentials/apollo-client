@@ -53,6 +53,30 @@
             </ul>
         </nav>
 
+        <template if:true={showDeleteSuccessAlert}>
+          <div class="alert alert-success" role="alert">
+            Delete successful!
+            <button type="button" class="close" aria-label="Close" onclick={hideDeleteAlert}>
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </template>
+        <template if:true={showCreateSuccessAlert}>
+          <div class="alert alert-primary" role="alert">
+            Book successfully created!
+            <button type="button" class="close" aria-label="Close" onclick={hideCreateAlert}>
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </template>
+        <template if:true={showUpdateSuccessAlert}>
+          <div class="alert alert-secondary" role="alert">
+            Book successfully updated!
+            <button type="button" class="close" aria-label="Close" onclick={hideUpdateAlert}>
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </template>
         <table class="table">
             <thead>
                 <tr>
