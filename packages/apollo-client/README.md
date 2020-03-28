@@ -128,8 +128,8 @@ Here an example of a request executed on demand:
     @wire(useQuery, {
         query: USERS,
         lazy: true
-    }) books;
-    
+    }) users;
+
     readUsers() {
         this.users.fetch().then( () => {
             // Notification that the data has been updated
