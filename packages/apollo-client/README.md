@@ -125,6 +125,11 @@ The GraphQL request is automatically emitted when the wire adapter configuration
 
 Here an example of a request executed on demand:
 ```javascript
+    @wire(useQuery, {
+        query: USERS,
+        lazy: true
+    }) books;
+    
     readUsers() {
         this.users.fetch().then( () => {
             // Notification that the data has been updated
