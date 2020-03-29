@@ -160,7 +160,7 @@ Mutations use the `useMutation` wire adapter:
     }) updateBook;
 ```  
 
-Similarly to lazy queries, the requests is not executed when the component is initialized but must be executed imperativelyexplicitly. For this, the wire adapter will initialize the result and make available a `mutate` method to call:  
+Similarly to lazy queries, the requests is not executed when the component is initialized but must be executed explicitly. For this, the wire adapter will initialize the result and make available a `mutate` method to call:  
 
 ```javascript
     const variables = {
@@ -175,6 +175,25 @@ Similarly to lazy queries, the requests is not executed when the component is in
         variables
     });
 ```  
+
+the `mutate` method also returns a promise to enable notification once a mutation has succeeded:
+```javascript
+    const variables = {
+    	  id,
+	     book: {
+            title: "new title",
+            author: "myself,
+            ...
+        }
+    };
+    this.bookDelete.mutate({
+        variables
+    }).then(() => {
+        //some notification or alert or variable change
+        this.showDeleteSuccessAlert = true;
+     });
+```  
+
 
 
 ### Mutation Results

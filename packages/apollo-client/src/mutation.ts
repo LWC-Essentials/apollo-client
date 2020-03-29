@@ -76,7 +76,7 @@ register(useMutation, (eventTarget:WireEventTarget) => {
         pendingResult.loading = true;
         update();
         // It is not necessary to return the Promise here, as the caller can use th on...() events
-        pendingResult.client.mutate(mergedOptions).then( ({ data, errors }) => {
+        return pendingResult.client.mutate(mergedOptions).then( ({ data, errors }) => {
             Object.assign( pendingResult, {
                 loading: false,
                 data,

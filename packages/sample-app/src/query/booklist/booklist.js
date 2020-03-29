@@ -55,6 +55,10 @@ export default class Booklist extends LightningElement {
 
     @api lazy=false; // Default boolean value
 
+    showDeleteSuccessAlert=false;
+    showCreateSuccessAlert=false;
+    showUpdateSuccessAlert=false;
+
     variables = {
         offset: 0,
         limit: 10
@@ -148,7 +152,9 @@ export default class Booklist extends LightningElement {
                         //     query: BOOK_LIST,
                         //     variables: this.variables
                         // }]
-                    });
+                    }).then(() => {
+                        this.showCreateSuccessAlert = true;
+                    });;
                 }
             });
         }
@@ -173,7 +179,9 @@ export default class Booklist extends LightningElement {
                                 publisher: book.publisher
                             }
                         };
-                        this.bookUpdate.mutate({variables});
+                        this.bookUpdate.mutate({variables}).then(() => {
+                            this.showUpdateSuccessAlert = true;
+                        });;
                     }
                 });
             }
@@ -197,6 +205,8 @@ export default class Booklist extends LightningElement {
                 //     query: BOOK_LIST,
                 //     variables: this.variables
                 // }]
+            }).then(() => {
+                this.showDeleteSuccessAlert = true;
             });
         }
     }
@@ -233,5 +243,17 @@ export default class Booklist extends LightningElement {
 
     get totalCount() {
         return (this.books.data && this.books.data.books.totalCount) || 0;
+    }
+
+    hideDeleteAlert() {
+        this.showDeleteSuccessAlert = false;
+    }
+
+    hideCreateAlert() {
+        this.showCreateSuccessAlert = false;
+    }
+
+    hideUpdateAlert() {
+        this.showUpdateSuccessAlert = false;
     }
 }
