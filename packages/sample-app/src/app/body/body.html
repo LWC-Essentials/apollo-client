@@ -7,7 +7,9 @@
 <template>
     <app-header></app-header>
 
-    <query-app if:true={isQuery}></query-app>
+    <lwce-router base="/">
+        <query-app if:true={isQuery}></query-app>
+    </lwce-router>
 
     <app-footer></app-footer>
 </template>
