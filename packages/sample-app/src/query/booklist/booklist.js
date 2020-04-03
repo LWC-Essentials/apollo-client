@@ -4,7 +4,7 @@
     SPDX-License-Identifier: BSD-3-Clause
     For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 */
-import { LightningElement, wire, api, track } from 'lwc';
+import { LightningElement, wire, api } from 'lwc';
 
 import { useQuery, useMutation } from '@lwce/apollo-client';
 
@@ -53,8 +53,6 @@ const BOOK_DELETE = gql`
 
 export default class Booklist extends LightningElement {
 
-    @api lazy=false; // Default boolean value
-
     showDeleteSuccessAlert=false;
     showCreateSuccessAlert=false;
     showUpdateSuccessAlert=false;
@@ -67,7 +65,6 @@ export default class Booklist extends LightningElement {
     // Query
     @wire(useQuery, {
         query: BOOK_LIST,
-        lazy: '$lazy',
         variables: '$variables'
     }) books;
 
@@ -219,10 +216,6 @@ export default class Booklist extends LightningElement {
             return page.toFixed(0) + "/" + total.toFixed(0);
         }
         return "0/0";
-    }
-
-    get lazyString() {
-        return this.books.called ? "Called" : "Not called";
     }
 
     get isError() {

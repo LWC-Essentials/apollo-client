@@ -58,7 +58,7 @@ function renderTemplate(template,isCompat) {
 // -- Middlewares -----------------------------------------------------------------------
 app.use('/static', express.static(staticPath()));
 
-app.get('/', (req, res) => {
+app.get('/*', (req, res) => {
     const isCompatMode = isCompat(req);
     res.send(renderTemplate(template,isCompatMode));
 });

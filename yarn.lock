@@ -1593,13 +1593,6 @@
     rollup "^1.32.1"
     terser "^4.6.4"
 
-"@lwc/engine@1.1.13":
-  version "1.1.13"
-  resolved "https://registry.yarnpkg.com/@lwc/engine/-/engine-1.1.13.tgz#89ba38f35f56692e42007984e8cba934678f9138"
-  integrity sha512-HXEYnBr4bItBq2W+DychsTpkgRZKN9QU6FLURatEVm6HLhmGCjjTVp6w5L99tQDknibIqkKbx80EsNeRaLcBnQ==
-  dependencies:
-    observable-membrane "0.26.1"
-
 "@lwc/engine@^1.4.0":
   version "1.4.0"
   resolved "https://nexus.soma.salesforce.com/nexus/content/groups/npm-all/@lwc/engine/-/engine-1.4.0.tgz#5cb261b46b3a388b40b30010b3561017fe257d84"
@@ -1704,11 +1697,6 @@
     esutils "^2.0.3"
     he "^1.1.1"
     parse5-with-errors "4.0.3-beta1"
-
-"@lwc/wire-service@^1.1.13":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@lwc/wire-service/-/wire-service-1.2.1.tgz#59a5ef3d618c49a82373a5a7c00c47886fe60454"
-  integrity sha512-1yWXCQRNw5PpNdSfedFX1e+pREIg6dvLbJtKcHwVCy6bDm7zUol78YC7tWZQC9Q93B9gIO1x1y+tfPodgNwSFg==
 
 "@lwc/wire-service@^1.4.0":
   version "1.4.0"

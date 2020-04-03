@@ -4,11 +4,10 @@
     SPDX-License-Identifier: BSD-3-Clause
     For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 */
-const express = require('express');
 const { gql } = require('apollo-server');
 const { ApolloServer } = require('apollo-server-express');
 
-const log = process.stdout.write.bind(process.stdout);
+//const log = process.stdout.write.bind(process.stdout);
 
 
 // A schema is a collection of type definitions (hence "typeDefs")
