@@ -34,25 +34,6 @@ interface Result {
     fetch?:         (v:any) => void;
 }
 
-function errorString(error?: any): string|undefined {
-    if(error) {
-        if(Array.isArray(error)) {
-            let s = "";
-            for( let i of (error as []) ) {
-                if(s) s+= "\n";
-                s+=errorString(i);
-            }
-            return s;
-        }
-        if(typeof error!=='string') {
-            error = error.toString();
-        }
-        return error;
-    }
-    return undefined;
-}
-
-
 register(useQuery, (eventTarget: WireEventTarget) => {
     let connected: boolean,
         apolloOptions: WatchQueryOptions,
@@ -88,7 +69,7 @@ register(useQuery, (eventTarget: WireEventTarget) => {
                 Object.assign(pendingResult, {
                     loading,
                     data,
-                    error:errorString(errors),
+                    error: errors,
                     initialized: true
                 })                
                 update();
@@ -97,7 +78,7 @@ register(useQuery, (eventTarget: WireEventTarget) => {
             Object.assign(pendingResult, {
                 loading: false,
                 data: undefined,
-                error: errorString(error),
+                error,
                 initialized: true
             })
             update();
