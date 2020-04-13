@@ -224,3 +224,23 @@ The options are the one being used by the Apollo client [mutate()](https://www.a
 ```
 
 The options are a merge between the global options defined at the `@wire` level, and the ones passed to the `mutate` method (the later overrides the former).  
+
+
+### Error Helpers
+
+Easily convert GraphQL error responses into a human readable string:
+
+```js
+import { getErrorString } from '@lwce/apollo-client';
+
+@wire(useQuery, { query: QUERY, lazy: false, variables: '$variables'})
+update(response) {
+    if (response.initialized) {
+        if (response.error) {
+            console.error(getErrorString(response.error));
+        } else {
+            this.data = response.data;
+        }
+    }
+}
+```
