@@ -10,12 +10,13 @@
 import "@lwc/synthetic-shadow"
 
 /* eslint-disable no-undef */
-import { createElement, register } from "lwc";
+import { register } from "lwc";
 
 // The wire service has to be registered once
 import { registerWireService } from 'wire-service';
 registerWireService(register)
 
+// Import this web components to get them loaded and registered
 import Body from "app/body";
 
 
@@ -32,5 +33,3 @@ import { setClient } from '@lwce/apollo-client';
 setClient(new ApolloClient({
     uri: 'http://localhost:3001/graphql'
 }));
-
-document.getElementById("main").appendChild(createElement("app-body", { is: Body }));
