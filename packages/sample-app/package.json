@@ -1,7 +1,7 @@
 {
     "name": "sample-app",
     "description": "Sample LWC Apollo Client application",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "private": true,
     "author": "Philippe Riand",
     "bugs": "https://github.com/LWC-Essentials/apollo-client/issues",
@@ -25,7 +25,7 @@
         "@lwc/rollup-plugin": "1.1.1",
         "@lwc/synthetic-shadow": "^1.1.1",
         "@lwc/wire-service": "^1.1.1",
-        "@lwce/apollo-client": "0.1.0",
+        "@lwce/apollo-client": "0.1.1",
         "@salesforce/eslint-config-lwc": "~0.3.0",
         "@wdio/cli": "~5.9.3",
         "@wdio/local-runner": "~5.9.3",

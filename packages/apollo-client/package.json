@@ -1,6 +1,6 @@
 {
   "name": "@lwce/apollo-client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Apollo client integration for Lightning Web Components",
   "license": "BSD-3-Clause",
   "author": "Philippe Riand",
