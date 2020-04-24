@@ -32,24 +32,6 @@ interface Result {
     mutate?:        (v:any) => void;
 }
 
-function errorString(error?: any): string|undefined {
-    if(error) {
-        if(Array.isArray(error)) {
-            let s = "";
-            for( let i of (error as []) ) {
-                if(s) s+= "\n";
-                s+=errorString(i);
-            }
-            return s;
-        }
-        if(typeof error!=='string') {
-            error = error.toString();
-        }
-        return error;
-    }
-    return undefined;
-}
-
 register(useMutation, (eventTarget:WireEventTarget) => {
     let apolloOptions: MutationOptions<any, OperationVariables>, 
         connected:boolean = true,
@@ -80,7 +62,7 @@ register(useMutation, (eventTarget:WireEventTarget) => {
             Object.assign( pendingResult, {
                 loading: false,
                 data,
-                error:errorString(errors),
+                error: errors,
                 initialized: true,
             });
             update();
@@ -88,7 +70,7 @@ register(useMutation, (eventTarget:WireEventTarget) => {
             Object.assign( pendingResult, {
                 loading: false,
                 data: undefined,
-                error:errorString(error),
+                error,
                 initialized: true,
             });
             update();
