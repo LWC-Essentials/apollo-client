@@ -1,6 +1,6 @@
 {
   "name": "@lwce/apollo-client",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Apollo client integration for Lightning Web Components",
   "license": "BSD-3-Clause",
   "author": "Philippe Riand",
@@ -18,8 +18,8 @@
     "types/"
   ],
   "devDependencies": {
-    "@lwc/engine": "1.1.13",
-    "@lwc/wire-service": "^1.1.13"
+    "@lwc/engine": "^1.6.0",
+    "@lwc/wire-service": "^1.6.0"
   },
   "dependencies": {
     "apollo-client": "^2.6.4"

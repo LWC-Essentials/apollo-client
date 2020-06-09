@@ -4,7 +4,6 @@
     SPDX-License-Identifier: BSD-3-Clause
     For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 */
-import { register, ValueChangedEvent, WireEventTarget } from '@lwc/wire-service';
 import { getClient } from './client';
 import { ApolloClient, WatchQueryOptions, ObservableQuery, OperationVariables, ApolloQueryResult } from "apollo-client";
 
@@ -17,12 +16,14 @@ import { ApolloClient, WatchQueryOptions, ObservableQuery, OperationVariables, A
 //    https://www.apollographql.com/docs/react/api/react-hooks/#uselazyquery
 //
 
+interface DataCallback {
+    (value: any): void;
+}
+
 export interface Options extends WatchQueryOptions {
     client: ApolloClient<any>;
     lazy: boolean;
 }
-
-export const useQuery = Symbol('apollo-use-query');
 
 interface Result {
     loading:        boolean;
@@ -34,88 +35,85 @@ interface Result {
     fetch?:         (v:any) => void;
 }
 
-register(useQuery, (eventTarget: WireEventTarget) => {
-    let connected: boolean,
-        apolloOptions: WatchQueryOptions,
-        observableQuery: ObservableQuery<ApolloQueryResult<any>,OperationVariables>,
-        subscription: ZenObservable.Subscription,
-        pendingResult: Result={
+export class useQuery {
+    dataCallback: DataCallback;
+
+    connected: boolean = false;
+    apolloOptions: WatchQueryOptions|undefined;
+    observableQuery: ObservableQuery<ApolloQueryResult<any>,OperationVariables>|undefined;
+    subscription: ZenObservable.Subscription|undefined;
+    pendingResult: Result;
+
+    constructor(dataCallback: DataCallback) {
+        this.dataCallback = dataCallback;
+        this.pendingResult = {
             client: undefined as unknown as ApolloClient<any>, // Trick - when sent to the component, it will be defined
             loading:false,
             data: undefined,
             error: undefined,
             initialized: false,
-            fetch: fetch
-        };
+            fetch: this.fetch.bind(this)
+        }    
+    }
 
-    function update() {
-        if(connected) {
-            // Make a copy to make the notification effective and prevent changes (ex: client instance)
-            const o = Object.assign({},pendingResult);
-            eventTarget.dispatchEvent(new ValueChangedEvent(o));
+    update(config: Record<string, any>) {
+        const {client,lazy, ...props} = config;
+        this.apolloOptions = <WatchQueryOptions>props;
+        this.pendingResult.client = client||getClient();
+        if(!lazy) {
+            this.fetch();
+        } else {
+            this.sendUpdate();
         }
     }
 
-    function fetch(options?: Options) {
-        const mergedOptions = {...apolloOptions, ...options};
-        pendingResult.loading = true;
-        update();
+    connect() {
+        this.connected = true;
+        this.sendUpdate();
+    }
+
+    disconnect() {
+        this.connected = false;
+        if(this.subscription) {
+            this.subscription.unsubscribe();
+        }
+    }
+
+
+    sendUpdate() {
+        if(this.connected) {
+            // Make a copy to make the notification effective and prevent changes (ex: client instance)
+            const o = Object.assign({},this.pendingResult);
+            this.dataCallback(o);
+        }
+    }
+
+    fetch(options?: Options) {
+        const mergedOptions = <WatchQueryOptions>{...this.apolloOptions, ...options};
+        this.pendingResult.loading = true;
+        this.sendUpdate();
         try {
-            if(subscription) {
-                subscription.unsubscribe();
+            if(this.subscription) {
+                this.subscription.unsubscribe();
             }
-            observableQuery =  pendingResult.client.watchQuery(mergedOptions);
-            subscription = observableQuery.subscribe(({ data, loading, errors }) => {
-                Object.assign(pendingResult, {
+            this.observableQuery =  this.pendingResult.client.watchQuery(mergedOptions);
+            this.subscription = this.observableQuery.subscribe(({ data, loading, errors }) => {
+                Object.assign(this.pendingResult, {
                     loading,
                     data,
                     error: errors,
                     initialized: true
-                })                
-                update();
+                })
+                this.sendUpdate();
             });
         } catch (error) {
-            Object.assign(pendingResult, {
+            Object.assign(this.pendingResult, {
                 loading: false,
                 data: undefined,
                 error,
                 initialized: true
             })
-            update();
+            this.sendUpdate();
         }
     }
-
-    function handleConfig(options: Options) {
-        const {client,lazy, ...props} = options;
-        apolloOptions = props;
-        pendingResult.client = client||getClient();
-        if(!lazy) {
-            fetch();
-        } else {
-            update();
-        }
-    }
-
-    function handleConnect() {
-        connected = true;
-        update();
-    }
-
-    function handleDisconnect() {
-        connected = false;
-        if(subscription) {
-            subscription.unsubscribe();
-        }
-        // eslint-disable-next-line @lwc/lwc/no-async-operation
-        setTimeout( function() {
-            eventTarget.removeEventListener('disconnect', handleDisconnect);
-            eventTarget.removeEventListener('connect', handleConnect);
-            eventTarget.removeEventListener('config', handleConfig);
-        });
-    }
-
-    // Connect the wire adapter
-    eventTarget.addEventListener('config', handleConfig);
-    eventTarget.addEventListener('connect', handleConnect);
-    eventTarget.addEventListener('disconnect', handleDisconnect);
-});
+}

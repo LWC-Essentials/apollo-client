@@ -19,12 +19,12 @@
         "useragent": "~2.3.0"
     },
     "devDependencies": {
-        "@lwc/compiler": "^1.4.0",
-        "@lwc/engine": "^1.4.0",
-        "@lwc/rollup-plugin": "^1.4.0",
-        "@lwc/synthetic-shadow": "^1.4.0",
-        "@lwc/wire-service": "^1.4.0",
-        "@lwce/apollo-client" : "^0.1.0",
+        "@lwc/compiler": "^1.6.0",
+        "@lwc/engine": "^1.6.0",
+        "@lwc/rollup-plugin": "^1.6.0",
+        "@lwc/synthetic-shadow": "^1.6.0",
+        "@lwc/wire-service": "^1.6.0",
+        "@lwce/apollo-client" : "^0.2.0",
         "@lwce/router" : "^0.2.5",        
         "@lwc/jest-preset": "2.2.0",
 
