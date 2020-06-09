@@ -5,9 +5,21 @@
     For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 -->
 <template>
-    <app-header></app-header>
+    <lwce-router>
 
-    <query-app if:true={isQuery}></query-app>
+        <app-header></app-header>
+        
+        <div style="margin-top: 72px">
+            <lwce-route path="/" exact>
+                <query-app></query-app>
+            </lwce-route>
 
-    <app-footer></app-footer>
+            <lwce-route path="/about">
+                <app-about></app-about>
+            </lwce-route>
+        </div>
+
+        <app-footer></app-footer>
+
+    </lwce-router>
 </template>

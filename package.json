@@ -1,11 +1,11 @@
 {
   "name": "@lwce/apollo",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "description": "Apollo client integration for Lightning Web Components",
   "private": true,
   "license": "BSD-3-Clause",
   "config": {
-    "lwcVersion": "1.1.0"
+    "lwcVersion": "1.6.0"
   },
   "scripts": {
     "build": "lerna run build --stream",
@@ -29,10 +29,6 @@
   "engines": {
     "yarn": ">=1.10.1",
     "node": ">=10.6.0"
-  },
-  "dependencies": {
-    "@lwc/engine": "1.1.13",
-    "@lwc/wire-service": "^1.1.13"
   },
   "devDependencies": {
     "rollup": "^1.7.4",

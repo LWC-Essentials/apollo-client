@@ -25,13 +25,14 @@ export default class FormField extends LightningElement {
         const event = new CustomEvent('request_context', {
           detail: {key},
           bubbles: true,
+          composed: true,
           cancelable: true,
         });
         this.dispatchEvent(event);
         if (event.defaultPrevented) {
           this.formData = event.detail.formData;
         } else {
-          throw new Error(`no provider found for ${key}`);
+          throw new Error(`no provider found for ${key}, field: ${this.field}`);
         }
     }
 

@@ -4,7 +4,6 @@
     SPDX-License-Identifier: BSD-3-Clause
     For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 */
-import { register, WireEventTarget, ValueChangedEvent } from '@lwc/wire-service';
 import { getClient } from './client';
 import ApolloClient, { MutationOptions, OperationVariables } from 'apollo-client';
 
@@ -15,12 +14,13 @@ import ApolloClient, { MutationOptions, OperationVariables } from 'apollo-client
 //    https://www.apollographql.com/docs/react/api/react-hooks/#usemutation
 //
 //
+interface DataCallback {
+    (value: any): void;
+}
 
 export interface Options extends MutationOptions<any, OperationVariables> {
     client: ApolloClient<any>;
 }
-
-export const useMutation = Symbol('apollo-use-mutation');
 
 interface Result {
     loading:        boolean;
@@ -32,75 +32,89 @@ interface Result {
     mutate?:        (v:any) => void;
 }
 
-register(useMutation, (eventTarget:WireEventTarget) => {
-    let apolloOptions: MutationOptions<any, OperationVariables>, 
-        connected:boolean = true,
-        pendingResult: Result={
+export function errorString(error?: any): string|undefined {
+    if(error) {
+        if(Array.isArray(error)) {
+            let s = "";
+            for( let i of (error as []) ) {
+                if(s) s+= "\n";
+                s+=errorString(i);
+            }
+            return s;
+        }
+        if(typeof error!=='string') {
+            error = error.toString();
+        }
+        return error;
+    }
+    return undefined;
+}
+
+export class useMutation {
+    dataCallback: DataCallback;
+
+    apolloOptions: MutationOptions<any, OperationVariables>|undefined
+    connected:boolean = true
+    pendingResult: Result
+
+    constructor(dataCallback: DataCallback) {
+        this.dataCallback = dataCallback;
+        this.pendingResult = {
             client: undefined as unknown as ApolloClient<any>, // Trick - when sent to the component, it will be defined
             loading:false,
             data: undefined,
             error: undefined,
             initialized: false,
-            mutate: mutate
+            mutate: this.mutate.bind(this)
         };
-
-    function update() {
-        if(connected) {
-            // Make a copy to make the notification effective and prevent changes (ex: client instance)
-            const o = Object.assign({},pendingResult);
-            eventTarget.dispatchEvent(new ValueChangedEvent(o));
-        }
-
     }
 
-    function mutate(options: MutationOptions<any, OperationVariables>) {
-        const mergedOptions = {...apolloOptions, ...options};
-        pendingResult.loading = true;
-        update();
+    update(config: Record<string, any>) {
+        const {client,...props} = config;
+        this.apolloOptions = <MutationOptions<any, OperationVariables>>{...props};
+        this.pendingResult.client = client||getClient();
+        this.sendUpdate();
+    }
+
+    connect() {
+        this.connected = true;
+        this.sendUpdate();
+    }
+
+    disconnect() {
+        this.connected = false;
+    }
+
+
+    sendUpdate() {
+        if(this.connected) {
+            // Make a copy to make the notification effective and prevent changes (ex: client instance)
+            const o = Object.assign({},this.pendingResult);
+            this.dataCallback(o);
+        }
+    }
+
+    mutate(options: MutationOptions<any, OperationVariables>) {
+        const mergedOptions = {...this.apolloOptions, ...options};
+        this.pendingResult.loading = true;
+        this.sendUpdate();
         // It is not necessary to return the Promise here, as the caller can use th on...() events
-        return pendingResult.client.mutate(mergedOptions).then( ({ data, errors }) => {
-            Object.assign( pendingResult, {
+        return this.pendingResult.client.mutate(mergedOptions).then( ({ data, errors }) => {
+            Object.assign( this.pendingResult, {
                 loading: false,
                 data,
-                error: errors,
+                error:errors,
                 initialized: true,
             });
-            update();
+            this.sendUpdate();
         }).catch( error => {
-            Object.assign( pendingResult, {
+            Object.assign( this.pendingResult, {
                 loading: false,
                 data: undefined,
-                error,
+                error:error,
                 initialized: true,
             });
-            update();
+            this.sendUpdate();
         });
     }
-
-    function handleConfig(options: Options) {
-        const {client,...props} = options;
-        apolloOptions = {...props};
-        pendingResult.client = client||getClient();
-        update();
-    }
-
-    function handleConnect() {
-        connected = true;
-        update();
-    }
-
-    function handleDisconnect() {
-        connected = false;
-        // eslint-disable-next-line @lwc/lwc/no-async-operation
-        setTimeout( function() {
-            eventTarget.removeEventListener('disconnect', handleDisconnect);
-            eventTarget.removeEventListener('connect', handleConnect);
-            eventTarget.removeEventListener('config', handleConfig);
-        });
-    }
-
-    eventTarget.addEventListener('config', handleConfig);
-    eventTarget.addEventListener('connect', handleConnect);
-    eventTarget.addEventListener('disconnect', handleDisconnect);
-});
-
+}

@@ -4,6 +4,12 @@
     SPDX-License-Identifier: BSD-3-Clause
     For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 */
+
+
+// Do not use native shadow DOM as it breaks bootstrap
+// This should be added before the LWC engine else it has some unpredictable results
+import "@lwc/synthetic-shadow"
+
 /* eslint-disable no-undef */
 import { createElement, register } from "lwc";
 
@@ -11,10 +17,8 @@ import { createElement, register } from "lwc";
 import { registerWireService } from 'wire-service';
 registerWireService(register)
 
+// Import this web components to get them loaded and registered
 import Body from "app/body";
-
-// Do not use native shadow DOM as it breaks bootstrap
-import "@lwc/synthetic-shadow"
 
 
 // We use the apollo-boost lib here for convenience, but this is not required
@@ -31,5 +35,5 @@ setClient(new ApolloClient({
     uri: 'http://localhost:3001/graphql'
 }));
 
-const main = createElement("app-body", { is: Body });
-document.getElementById("main").appendChild(main);
+// Manually creates the component until the wire reform kicks in abs then we'll use a custom element instead
+document.getElementById("main").appendChild(createElement("app-body", { is: Body }));
