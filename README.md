@@ -19,8 +19,9 @@ The project contains a sample application that shows how to use the library. It 
 To run the application:  
 
 ```
+yarn
 yarn build
-yarn serve
+yarn start
 ```  
   
 Here is a video of the demo application:  
